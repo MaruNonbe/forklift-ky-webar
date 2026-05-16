@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>フォークリフト接触事故 AR KYトレーニング</title>
+
+  <!-- model-viewer 読み込み -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .app {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background: #111;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #333 0%, #111 70%);
+    }
+
+    .top-panel {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.68);
+      border-radius: 14px;
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .top-panel h1 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .top-panel p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #e5e5e5;
+    }
+
+    .bottom-panel {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 10;
+      display: grid;
+      gap: 8px;
+    }
+
+    .message {
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.72);
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #f2f2f2;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #374151;
+    }
+
+    button.danger {
+      background: #dc2626;
+    }
+
+    button.safe {
+      background: #16a34a;
+    }
+
+    .ar-button {
+      background: #f97316;
+      color: #fff;
+      border-radius: 999px;
+      border: none;
+      position: absolute;
+      right: 16px;
+      bottom: 150px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    }
+
+    .notice {
+      position: absolute;
+      right: 12px;
+      top: 112px;
+      padding: 8px 10px;
+      background: rgba(220, 38, 38, 0.9);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 10;
+    }
+
+    .copyright {
+      position: absolute;
+      left: 12px;
+      bottom: 156px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.75);
+      background: rgba(0,0,0,0.45);
+      padding: 5px 8px;
+      border-radius: 999px;
+      z-index: 10;
+    }
+
+    @media (max-width: 480px) {
+      .top-panel h1 {
+        font-size: 15px;
+      }
+
+      .top-panel p,
+      .message {
+        font-size: 12px;
+      }
+
+      button {
+        font-size: 13px;
+        padding: 11px 8px;
+      }
+
+      .ar-button {
+        bottom: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <model-viewer
+      id="viewer"
+      src="./models/forklift_ky.glb"
+      alt="フォークリフト接触事故の危険予知ARモデル"
+      ar
+      ar-modes="scene-viewer webxr quick-look"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      rotation-per-second="18deg"
+      shadow-intensity="1"
+      exposure="1"
+      environment-image="neutral"
+      ar-scale="fixed"
+      camera-orbit="35deg 65deg 8m"
+      min-camera-orbit="auto auto 3m"
+      max-camera-orbit="auto auto 14m"
+      field-of-view="35deg"
+      reveal="auto"
+    >
+
+      <!-- AR起動ボタン -->
+      <button slot="ar-button" class="ar-button">
+        ARで表示
+      </button>
+
+    </model-viewer>
+
+    <div class="top-panel">
+      <h1>フォークリフト接触事故 AR KYトレーニング</h1>
+      <p>
+        フォークリフト後退時の危険エリア、作業者の横断、動線の交差をARで確認します。
+      </p>
+    </div>
+
+    <div class="notice">
+      DEMO版
+    </div>
+
+    <div class="copyright">
+      © Freedom / AR Safety Training Demo
+    </div>
+
+    <div class="bottom-panel">
+      <div id="message" class="message">
+        画面内のモデルを回転・拡大できます。スマホでは「ARで表示」を押して床面に配置してください。
+      </div>
+
+      <div class="buttons">
+        <button class="danger" onclick="showDangerMessage()">危険ポイント</button>
+        <button class="safe" onclick="showSafetyMessage()">改善ポイント</button>
+        <button class="secondary" onclick="resetView()">表示リセット</button>
+        <button onclick="playVoice()">音声説明</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const viewer = document.getElementById("viewer");
+    const message = document.getElementById("message");
+
+    function showDangerMessage() {
+      message.innerHTML =
+        "危険ポイント：フォークリフトの後退方向と作業者の歩行ルートが交差しています。後方確認不足、死角、歩行者通路との交差が接触事故につながるおそれがあります。";
+    }
+
+    function showSafetyMessage() {
+      message.innerHTML =
+        "改善ポイント：歩行者通路とフォークリフト走行エリアを分離し、一時停止ライン、立入禁止エリア、確認ミラー、誘導者配置を検討します。";
+    }
+
+    function resetView() {
+      message.innerHTML =
+        "画面内のモデルを回転・拡大できます。スマホでは「ARで表示」を押して床面に配置してください。";
+
+      viewer.cameraOrbit = "35deg 65deg 8m";
+      viewer.fieldOfView = "35deg";
+      viewer.autoRotate = true;
+    }
+
+    function playVoice() {
+      const text =
+        "これはフォークリフト接触事故の危険予知トレーニングです。フォークリフトが後退する方向に作業者が入り込むと、後方確認不足や死角により接触事故につながるおそれがあります。歩行者通路とフォークリフト走行エリアを分け、一時停止ラインや確認ミラー、誘導者の配置を検討しましょう。";
+
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "ja-JP";
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+
+        window.speechSynthesis.speak(utterance);
+
+        message.innerHTML = "音声説明を再生しています。";
+      } else {
+        message.innerHTML = "このブラウザでは音声読み上げに対応していません。";
+      }
+    }
+
+    viewer.addEventListener("load", () => {
+      console.log("GLB model loaded.");
+    });
+
+    viewer.addEventListener("error", (event) => {
+      console.error("Model load error:", event);
+      message.innerHTML =
+        "モデルの読み込みに失敗しました。GLBファイル名、保存場所、ファイルサイズを確認してください。";
+    });
+  </script>
+</body>
+</html>
