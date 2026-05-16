@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iOS版 フォークリフトKY AR</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111;
+      color: #fff;
+      line-height: 1.7;
+    }
+
+    .card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #1f2937;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    h1 {
+      font-size: 24px;
+      line-height: 1.35;
+      margin: 0 0 12px;
+    }
+
+    p {
+      color: #e5e7eb;
+    }
+
+    .ar-link {
+      display: block;
+      text-align: center;
+      margin: 24px 0 12px;
+      padding: 18px 20px;
+      border-radius: 999px;
+      background: #f97316;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #cbd5e1;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      border-radius: 14px;
+      margin: 16px 0;
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>フォークリフト接触事故<br>KYトレーニングAR iOS版</h1>
+
+    <p>
+      フォークリフトの後退時に作業者が後方を横切る場面を、
+      iPhoneのAR Quick Lookで確認するデモです。
+    </p>
+
+    <p>
+      AR表示では、モデルを床や机の上に配置し、
+      危険エリア、歩行者の位置、動線の交差を確認できます。
+    </p>
+
+    <!-- サムネイル画像があれば使用 -->
+    <img src="./images/thumbnail.jpg" alt="フォークリフトKY ARモデルのサムネイル">
+
+    <a class="ar-link" rel="ar" href="./models/forklift_ky.usdz">
+      iPhoneでAR表示する
+    </a>
+
+    <div class="note">
+      ※ iPhone / iPad のSafariで開いてください。<br>
+      ※ AR表示には USDZ ファイルを使用します。<br>
+      ※ 初回は静止モデルとして確認し、アニメーション対応は別途検証します。
+    </div>
+  </div>
+</body>
+</html>
