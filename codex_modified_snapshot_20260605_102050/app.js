@@ -14,6 +14,7 @@ let placedModel = null;
 let mixer = null;
 let clock;
 let animationActions = [];
+let currentAction = null;
 let modelPlaced = false;
 let modelBaseScale = 1.0;
 
@@ -109,7 +110,9 @@ function loadModel() {
           action.clampWhenFinished = true;
           action.loop = THREE.LoopRepeat;
           return action;
-        });        updateStatus(`モデルを読み込みました。アニメーション数: ${gltf.animations.length}。ARを開始し、床面をタップして配置してください。`);
+        });
+        currentAction = animationActions[0];
+        updateStatus(`モデルを読み込みました。アニメーション数: ${gltf.animations.length}。ARを開始し、床面をタップして配置してください。`);
       } else {
         updateStatus("モデルを読み込みました。GLB内にアニメーションは見つかりませんでした。ARを開始し、床面をタップして配置してください。");
       }
@@ -163,43 +166,33 @@ function onSelect() {
   }
 }
 
-function hasAnimations() {
-  return animationActions.length > 0;
-}
-
 function playAnimation() {
-  if (!hasAnimations()) {
+  if (!currentAction) {
     updateStatus("このGLBには再生できるアニメーションがありません。BlenderのGLB書き出し設定を確認してください。");
     return;
   }
-  animationActions.forEach((action) => {
-    action.paused = false;
-    action.play();
-  });
-  updateStatus("アニメーションを再生しています。フォークリフトの後退、作業者の移動、危険エリアの関係を確認してください。");
+  currentAction.paused = false;
+  currentAction.play();
+  updateStatus("アニメーションを再生しています。フォークリフトの後退と作業者の動きを確認してください。");
 }
 
 function pauseAnimation() {
-  if (!hasAnimations()) {
+  if (!currentAction) {
     updateStatus("一時停止できるアニメーションがありません。");
     return;
   }
-  animationActions.forEach((action) => {
-    action.paused = true;
-  });
+  currentAction.paused = true;
   updateStatus("アニメーションを一時停止しました。");
 }
 
 function resetAnimation() {
-  if (!hasAnimations()) {
+  if (!currentAction) {
     updateStatus("リセットできるアニメーションがありません。");
     return;
   }
-  animationActions.forEach((action) => {
-    action.stop();
-    action.reset();
-    action.paused = true;
-  });
+  currentAction.stop();
+  currentAction.reset();
+  currentAction.paused = true;
   if (mixer) mixer.setTime(0);
   updateStatus("アニメーションを最初の状態に戻しました。");
 }
@@ -285,4 +278,3 @@ function onWindowResize() {
 function updateStatus(text) {
   if (statusEl) statusEl.textContent = text;
 }
-
